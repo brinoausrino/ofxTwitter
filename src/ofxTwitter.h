@@ -69,6 +69,8 @@ class ofxTwitter {
     
         void printDebugInfo();
     
+        ofxOAuth* getOauth();
+    
     private:
 	
         ofxOAuth oauth;

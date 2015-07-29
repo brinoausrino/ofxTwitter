@@ -542,5 +542,9 @@ void ofxTwitter::printDebugInfo() {
     
 }
 
+ofxOAuth* ofxTwitter::getOauth(){
+    return &oauth;
+}
+
 
 
