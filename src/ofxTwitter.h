@@ -56,6 +56,8 @@ class ofxTwitter {
         void newResponse(ofEventArgs& args);
         void parseResponse(ofxJSONElement result);
     
+        void startStream();
+    
         void postStatus(string msg);
         void postStatus(string msg, string imgfile);
         void newStatusResponse(ofEventArgs& args);

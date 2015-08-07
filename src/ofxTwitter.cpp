@@ -51,7 +51,8 @@ void ofxTwitter::appExits(ofEventArgs& args) {
 void ofxTwitter::authorize(const string& consumerKey, const string& consumerSecret) {
     
     ofLogNotice("ofxTwitter::authorize") << "Authorizing app...";
-    oauth.setup("https://api.twitter.com", consumerKey, consumerSecret);
+    //oauth.setup("https://api.twitter.com", consumerKey, consumerSecret);
+    oauth.setup("https://stream.twitter.com", consumerKey, consumerSecret);
     
     ofRegisterURLNotification(this);
     ofAddListener(ofEvents().exit,this,&ofxTwitter::appExits);
@@ -244,6 +245,49 @@ void ofxTwitter::startSearch(ofxTwitterSearch search) {
     }
     
 }
+
+void ofxTwitter::startStream(){
+    if(oauth.isAuthorized()) {
+        string query;
+        query+= "/1.1/statuses/filter.json";
+        /*if(search.query.empty()) {
+            ofLogError("ofxTwitter::startSearch") << "Query is required.";
+            return;
+        }*/
+        /*
+        query+= "q="+search.query;
+        if(search.geocode.x != 0 and search.geocode.y != 0) {
+            query+= "&geocode="+ofToString(search.geocode.x)+","+ofToString(search.geocode.y);
+            query+= ","+ofToString(search.geocode_radius);
+            if(search.bUseMiles) {
+                query+= "mi";
+            } else {
+                query+= "km";
+            }
+        }
+        if(!search.lang.empty()) query+= "&lang="+search.lang;
+        if(!search.locale.empty()) query+= "&locale="+search.locale;
+        if(!search.result_type.empty()) query+= "&result_type="+search.result_type;
+        if(search.count > 0 && search.count != 15) query+= "&count="+ofToString(search.count);
+        if(!search.until.empty()) query+= "&until="+search.until;
+        if(search.since_id > 0) query+= "&since_id="+ofToString(search.since_id);
+        if(search.max_id > 0) query+= "&max_id="+ofToString(search.max_id);
+        if(!search.include_entities) {
+            query+= "&include_entities=false";
+        }*/
+        dataRequested = "";
+        dataRequested = oauth.get(query,"locations=-123.044,36.846,-121.591,38.352");
+       // ofHttpResponse s  = ofLoadURL("https://stream.twitter.com/1.1/statuses/filter.json?track=imdb");
+        
+        
+        
+        
+        ofAddListener(ofEvents().update,this,&ofxTwitter::newResponse);
+    } else {
+        ofLogError("ofxTwitter::startQuery") << "App not authorized.";
+    }
+}
+
 
 //--------------------------------------------------------------
 void ofxTwitter::updateStatus(string msg, string imgpath) {
